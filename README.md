@@ -1,5 +1,8 @@
 # BasicPID
 
+## Math behind the controller
+
+
 ## PID Controller in laplace domain:
 PID(s) = Kp + Ki * 1/s + Kd * (s/sT + 1)
 
@@ -16,3 +19,9 @@ Derivative spikes during change in setpoint, must take derivative on measurement
 Integral can saturate output if held at one point for awhile: Use integral anti-windup. (clamping integral when control signal is at max for a long time)
 
 Real world actuators have limits, U term must be clamped.
+
+
+## Usage
+Create a pid object and call init().
+During each iteration of a control loop pass in measurement data and a desired output.
+Convert output signal to inputs to actuators
