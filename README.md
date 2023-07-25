@@ -1,27 +1,30 @@
 # BasicPID
 
-## Math behind the controller
+### Math behind the controller
 
 
-## PID Controller in laplace domain:
-PID(s) = Kp + Ki * 1/s + Kd * (s/sT + 1)
+##### PID Controller in laplace domain:
+$U(s) = K_p + K_i * \frac{1}{s} + K_d * s $
 
-## PID Controller in discrete domain:
-P[n] = Kp*E[n]
-I[n] = Ki * t/2 * (E[n] + E[n-1]) + I[n-1]
-D[n] = 2Kd/(2T +t) * (E[n] - E[n-1]) + (2T-t)/(2T+t) * D[n-1]
+##### PID Controller in discrete domain:
+$P_n = Kp*E_n $
 
-U[n] = P[n] + I[n] + D[n}
+$I_n = Ki * \frac{t}{2} * (E_n + E_{n-1}) + I_{n-1} $
 
-Derivative term amplifies high frequency noise, must apply low pass filter.
-Derivative spikes during change in setpoint, must take derivative on measurements not error.
+$D_n = \frac{2Kd}{2T +t} * (E_n - E_{n-1} + \frac{2T-t}{2T+t} * D_{n-1} $
 
-Integral can saturate output if held at one point for awhile: Use integral anti-windup. (clamping integral when control signal is at max for a long time)
+$U_{n} = P_{n} + I_{n} + D_{n} $
 
-Real world actuators have limits, U term must be clamped.
+### Practical Notes
+- Derivative term amplifies high frequency noise, must apply low pass filter.
+- Derivative spikes during change in setpoint, must take derivative on measurements not error.
+
+- Integral can saturate output if held at one point for awhile: Use integral anti-windup. (clamping integral when control signal is at max for a long time)
+
+- Real world actuators have limits, U term must be clamped.
 
 
-## Usage
-Create a pid object and call init().
-During each iteration of a control loop pass in measurement data and a desired output.
-Convert output signal to inputs to actuators
+### Usage
+- Create a pid object and call init().
+- During each iteration of a control loop pass in measurement data and a desired output to update().
+- Convert output signal to inputs to actuators
