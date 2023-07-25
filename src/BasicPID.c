@@ -1,6 +1,6 @@
 #include "BasicPID.h"
 
-void PIDInit(PIDController* pid)
+void PIDInit(PIDController* pid, float kp, float ki, float kd, float tau, float dt, float maxOutput, float minOutput)
 {
 	pid->integral = 0.0f;
 	pid->prevError = 0.0f;
@@ -8,7 +8,19 @@ void PIDInit(PIDController* pid)
 	pid->derivative = 0.0f;
 	pid->prevMeasurement = 0.0f;
 
-	pid->out = 0.0f;
+	pid->output = 0.0f;
+
+	pid->kp = kp;
+	pid->ki = ki;
+	pid->kd = kd;
+
+
+	pid->tau = tau;
+	pid->T = dt;
+
+	pid->upperLimit = maxOutput;
+	pid->lowerLimit = minOutput;
+
 
 }
 
@@ -37,7 +49,7 @@ float PIDUpdate(PIDController* pid, float setpoint, float measurement)
 
 	if (pid->lowerLimit < proportional)
 		limMinI = pid->lowerLimit - proportional;
-	else limMinxI = 0.0f;
+	else limMinI = 0.0f;
 
 	
 	if (pid->integral > limMaxI) pid->integral = limMaxI;
@@ -54,12 +66,12 @@ float PIDUpdate(PIDController* pid, float setpoint, float measurement)
 
 	pid->output = proportional + pid->integral + pid->derivative;
 
-	if (pid->out > pid->upperLimit) pid->out = pid->upperLimit;
+	if (pid->output > pid->upperLimit) pid->output = pid->upperLimit;
 
-	if (pid->out < pid->lowerLimit) pid->out = pid->lowerLimit;
+	if (pid->output < pid->lowerLimit) pid->output = pid->lowerLimit;
 
 
 	pid->prevError = error;
 	pid->prevMeasurement = measurement;
-	return pid->out;
+	return pid->output;
 }

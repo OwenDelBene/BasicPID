@@ -28,9 +28,12 @@ typedef struct{
 
 } PIDController;
 
-void PIDInit(PIDController* pid);
 
+void PIDInit(PIDController* pid, float kp, float ki, float kd, float tau, float dt, float maxOutput, float minOutput);
 float PIDUpdate(PIDController* pid, float setpoint, float measurement);
 
 
 #endif
+
+
+
